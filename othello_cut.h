@@ -140,6 +140,9 @@ class state_t {
                 valid_moves.push_back(pos);
             }
         }
+        if(valid_moves.size() == 0){
+            valid_moves.push_back(36);
+        }
         return valid_moves;
     }
 

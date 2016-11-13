@@ -49,7 +49,7 @@ int minmax(state_t state, int depth, bool use_tt = false){
     int tmp;
     int score = 100000;
     state_t child;
-    std::vector<int> valid_moves = state.get_valid_moves(false);
+    vector<int> valid_moves = state.get_valid_moves(false);
     if (valid_moves.size() != 0) {
         for (unsigned i = 0; i < valid_moves.size() ; i++) {
             child = state.move(false, valid_moves[i]);
@@ -60,9 +60,6 @@ int minmax(state_t state, int depth, bool use_tt = false){
             //cout << "Valor: " << tmp << endl; 
             //score = std::min(score, maxmin(child, depth - 1, use_tt));
         }
-    }
-    else {
-        score = score < (tmp = maxmin(state, depth - 1, use_tt)) ? score : tmp;
     }
     return score;
 };
@@ -75,7 +72,7 @@ int maxmin(state_t state, int depth, bool use_tt = false) {
     int tmp;
     int score = -100000;
     state_t child;
-    std::vector<int> valid_moves = state.get_valid_moves(true);
+    vector<int> valid_moves = state.get_valid_moves(true);
     if (valid_moves.size() != 0) {
         for (unsigned i = 0; i < valid_moves.size() ; i++) {
             child = state.move(true, valid_moves[i]);
@@ -88,13 +85,34 @@ int maxmin(state_t state, int depth, bool use_tt = false) {
             //cout << "Valor: " << tmp << endl;
         }
     }
-    else {
-        score = score < (tmp = minmax(state, depth - 1, use_tt)) ? tmp : score;
-    }
     return score;
 };
 
-int negamax(state_t state, int depth, int color, bool use_tt = false);
+int negamax(state_t state, int depth, int color, bool use_tt = false){
+    if (state.terminal()) {
+        //cout << "Valor: " << state.value() << endl;
+        return color*state.value();
+    }
+
+    int alpha = -100000;
+    int tmp;
+    bool mv = false;
+    state_t child;
+    if(color == 1){
+        mv = true;
+    }
+    vector<int> valid_moves = state.get_valid_moves(mv);
+    if(valid_moves.size() != 0){
+        for(unsigned i = 0; i < valid_moves.size(); i++){
+            child = state.move(mv,valid_moves[i]);
+            generated++;
+            alpha = alpha > (tmp = -negamax(child,depth-1,-color,use_tt)) ? alpha : tmp;
+        }
+    }
+    return alpha;
+
+
+};
 int negamax(state_t state, int depth, int alpha, int beta, int color, bool use_tt = false);
 int scout(state_t state, int depth, int color, bool use_tt = false);
 int negascout(state_t state, int depth, int alpha, int beta, int color, bool use_tt = false);
@@ -158,7 +176,7 @@ int main(int argc, const char **argv) {
             if( algorithm == 0 ) {
                 value = color * (color == 1 ? maxmin(pv[i], 0, use_tt) : minmax(pv[i], 0, use_tt));
             } else if( algorithm == 1 ) {
-                //value = negamax(pv[i], 0, color, use_tt);
+                value = negamax(pv[i], 0, color, use_tt);
             } else if( algorithm == 2 ) {
                 //value = negamax(pv[i], 0, -200, 200, color, use_tt);
             } else if( algorithm == 3 ) {
