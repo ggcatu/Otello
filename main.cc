@@ -148,8 +148,92 @@ int negamax(state_t state, int depth, int alpha, int beta, int color, bool use_t
     return score;
 };
 
-int scout(state_t state, int depth, int color, bool use_tt = false);
-int negascout(state_t state, int depth, int alpha, int beta, int color, bool use_tt = false);
+
+// COMO SE SI ES MAX O ES MIN? color == 1 ? NOP
+bool test(state_t state, int depth, int color, int score){
+    if(state.terminal()){
+        return color*state.value() > score ? true : false;
+    }
+    bool mv = false;
+    state_t child;
+    if(color == 1){
+        mv = true;
+    }
+    vector<int> valid_moves = state.get_valid_moves(mv);
+    for(unsigned i = 0; i < valid_moves.size(); i++){
+        child = state.move(mv,valid_moves[i]);
+        if (color == 1 && test(child,depth-1,-color, score)){
+            return true;
+        }
+        if (color == -1 && !test(child,depth-1,-color, score)){
+            return false;
+        }
+    }
+    return color == 1 ? false : true;
+}
+
+int scout(state_t state, int depth, int color, bool use_tt = false){
+    if(state.terminal()){
+        return color*state.value();
+    }
+    expanded++;
+    int score = 0;
+    bool mv = false;
+    state_t child;
+    if(color == 1){
+        mv = true;
+    }
+    vector<int> valid_moves = state.get_valid_moves(mv);
+    for(unsigned i = 0; i < valid_moves.size(); i++){
+        child = state.move(mv,valid_moves[i]);
+        generated++;
+        if (i == 0){
+            score = scout(child,depth-1,-color,use_tt);
+        } else {
+            if (color == 1){
+                // Node is max or min
+                score = scout(child,depth-1, -color, use_tt);
+            }
+            if (color == -1){
+                // Node is max or min
+                score = scout(child,depth-1, -color, use_tt);
+            }
+        }
+    }
+    return score;
+};
+
+
+int negascout(state_t state, int depth, int alpha, int beta, int color, bool use_tt = false){
+    if(state.terminal()){
+        return color*state.value();
+    }
+    expanded++;
+    int score;
+    state_t child;
+    bool mv = false;
+    if(color == 1){
+        mv = true;
+    }
+    vector<int> valid_moves = state.get_valid_moves(mv);
+    // cout << "Color : " << color << " Valid moves: " << valid_moves.size() << endl;
+    for(unsigned i = 0; i < valid_moves.size(); i++){
+        child = state.move(mv,valid_moves[i]);
+        generated++;
+        if (i == 0){
+            score = -negascout(child,depth-1,-beta,-alpha,-color,use_tt);
+        } else {
+            score = -negascout(child,depth-1,-alpha-1,-alpha,-color,use_tt);
+            if (alpha < score && score < beta){
+                score = -negascout(child,depth-1,-beta,-score,-color,use_tt);
+            }
+        }
+        alpha = alpha > score ? alpha : score;
+        if (alpha >= beta) break;
+    }
+    // cout << "Alpha : " << alpha << " Score: " << score << endl;
+    return alpha;
+};
 
 int main(int argc, const char **argv) {
     state_t pv[128];
@@ -196,8 +280,8 @@ int main(int argc, const char **argv) {
     // Run algorithm along PV (backwards)
     cout << "Moving along PV:" << endl;
     for( int i = 0; i <= npv; ++i ) {
-        //cout << "Tablero inicial: " << endl;
-        //cout << pv[i];
+        // cout << "Tablero inicial: " << endl;
+        // cout << pv[i];
         int value = 0;
         TTable[0].clear();
         TTable[1].clear();
@@ -216,7 +300,7 @@ int main(int argc, const char **argv) {
             } else if( algorithm == 3 ) {
                 //value = scout(pv[i], 0, color, use_tt);
             } else if( algorithm == 4 ) {
-                //value = negascout(pv[i], 0, -200, 200, color, use_tt);
+                value = negascout(pv[i], 0, -200, 200, color, use_tt);
             }
         } catch( const bad_alloc &e ) {
             cout << "size TT[0]: size=" << TTable[0].size() << ", #buckets=" << TTable[0].bucket_count() << endl;
