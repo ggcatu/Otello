@@ -8,6 +8,7 @@
 #include <limits>
 #include "othello_cut.h" // won't work correctly until .h is fixed!
 #include "utils.h"
+#include <vector>
 
 #include <unordered_map>
 
@@ -37,8 +38,35 @@ class hash_table_t : public unordered_map<state_t, stored_info_t, hash_function_
 hash_table_t TTable[2];
 
 int maxmin(state_t state, int depth, bool use_tt);
-int minmax(state_t state, int depth, bool use_tt = false);
-int maxmin(state_t state, int depth, bool use_tt = false);
+
+int minmax(state_t state, int depth, bool use_tt = false){
+    if (state.terminal()) return state.value();
+    unsigned tmp;
+    unsigned score = 100000;
+    state_t child;
+    std::vector<int> valid_moves = state.get_valid_moves(true);
+    for (unsigned i = 0; i < valid_moves.size() ; i++) {
+        child = state.move(true, valid_moves[i]);
+        score = score < (tmp = maxmin(child, depth - 1, use_tt)) ? score : tmp; 
+        //score = min(score, maxmin(child, depth - 1))
+    }
+    return score;
+};
+
+int maxmin(state_t state, int depth, bool use_tt = false) {
+    if (state.terminal()) return state.value();
+    unsigned tmp;
+    unsigned score = 100000;
+    state_t child;
+    std::vector<int> valid_moves = state.get_valid_moves(false);
+    for (unsigned i = 0; i < valid_moves.size() ; i++) {
+        child = state.move(false, valid_moves[i]);
+        score = score < (tmp = minmax(child, depth - 1, use_tt)) ? tmp : score; 
+        //score = max(score, minmax(child, depth - 1))
+    }
+    return score;
+};
+
 int negamax(state_t state, int depth, int color, bool use_tt = false);
 int negamax(state_t state, int depth, int alpha, int beta, int color, bool use_tt = false);
 int scout(state_t state, int depth, int color, bool use_tt = false);
@@ -86,7 +114,7 @@ int main(int argc, const char **argv) {
     }
     cout << (use_tt ? " w/ transposition table" : "") << endl;
 
-    // Run algorithm along PV (bacwards)
+    // Run algorithm along PV (backwards)
     cout << "Moving along PV:" << endl;
     for( int i = 0; i <= npv; ++i ) {
         //cout << pv[i];
@@ -100,7 +128,7 @@ int main(int argc, const char **argv) {
 
         try {
             if( algorithm == 0 ) {
-                //value = color * (color == 1 ? maxmin(pv[i], 0, use_tt) : minmax(pv[i], 0, use_tt));
+                value = color * (color == 1 ? maxmin(pv[i], 0, use_tt) : minmax(pv[i], 0, use_tt));
             } else if( algorithm == 1 ) {
                 //value = negamax(pv[i], 0, color, use_tt);
             } else if( algorithm == 2 ) {
@@ -125,6 +153,9 @@ int main(int argc, const char **argv) {
              << ", seconds=" << elapsed_time
              << ", #generated/second=" << generated/elapsed_time
              << endl;
+        if (i == 1) {
+            break;
+        }
     }
 
     return 0;
