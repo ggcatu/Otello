@@ -149,10 +149,18 @@ int negamax(state_t state, int depth, int alpha, int beta, int color, bool use_t
 };
 
 
+bool mayor(int a, int b){
+    return a>b;
+}
+bool mayorigual(int a, int b){
+    return a>=b;
+}
+
+
 // COMO SE SI ES MAX O ES MIN? color == 1 ? NOP
-bool test(state_t state, int depth, int color, int score){
+bool test(state_t state, int depth, int color, int score, bool func(int,int), int max){
     if(state.terminal()){
-        return color*state.value() > score ? true : false;
+        return func(color*state.value(),score) ? true : false;
     }
     bool mv = false;
     state_t child;
@@ -162,17 +170,17 @@ bool test(state_t state, int depth, int color, int score){
     vector<int> valid_moves = state.get_valid_moves(mv);
     for(unsigned i = 0; i < valid_moves.size(); i++){
         child = state.move(mv,valid_moves[i]);
-        if (color == 1 && test(child,depth-1,-color, score)){
+        if (max == 1 && test(child,depth-1,-color, score, func, -max)){
             return true;
         }
-        if (color == -1 && !test(child,depth-1,-color, score)){
+        if (max == -1 && !test(child,depth-1,-color, score, func, -max)){
             return false;
         }
     }
-    return color == 1 ? false : true;
+    return max == 1 ? false : true;
 }
 
-int scout(state_t state, int depth, int color, bool use_tt = false){
+int scout_m(state_t state, int depth, int color, int max, bool use_tt = false){
     if(state.terminal()){
         return color*state.value();
     }
@@ -188,19 +196,21 @@ int scout(state_t state, int depth, int color, bool use_tt = false){
         child = state.move(mv,valid_moves[i]);
         generated++;
         if (i == 0){
-            score = scout(child,depth-1,-color,use_tt);
+            score = scout_m(child,depth-1,-color, -max,use_tt);
         } else {
-            if (color == 1){
-                // Node is max or min
-                score = scout(child,depth-1, -color, use_tt);
+            if (max == 1 && test(child,depth,-color, score,mayor,-max)){
+                score = scout_m(child, depth-1, -color, -max, use_tt);
             }
-            if (color == -1){
-                // Node is max or min
-                score = scout(child,depth-1, -color, use_tt);
+            if (max == -1 && !test(child,depth,-color, score,mayorigual,-max)){
+                score = scout_m(child, depth-1, -color, -max, use_tt);
             }
         }
     }
     return score;
+};
+
+int scout(state_t state, int depth, int color, bool use_tt = false){
+    return scout_m(state, depth, color, 1, use_tt);
 };
 
 
@@ -298,7 +308,7 @@ int main(int argc, const char **argv) {
             } else if( algorithm == 2 ) {
                 value = negamax(pv[i], 0, -200, 200, color, use_tt);
             } else if( algorithm == 3 ) {
-                //value = scout(pv[i], 0, color, use_tt);
+                value = scout(pv[i], 0, color, use_tt);
             } else if( algorithm == 4 ) {
                 value = negascout(pv[i], 0, -200, 200, color, use_tt);
             }
