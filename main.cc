@@ -10,6 +10,7 @@
 #include "utils.h"
 #include <vector>
 #include <algorithm>
+#include <cmath>
 
 #include <unordered_map>
 
@@ -46,6 +47,8 @@ int minmax(state_t state, int depth, bool use_tt = false){
         //cout << "Valor: " << state.value() << endl;
         return state.value();
     }
+    expanded++;
+
     int tmp;
     int score = 100000;
     state_t child;
@@ -69,6 +72,8 @@ int maxmin(state_t state, int depth, bool use_tt = false) {
         //cout << "Valor: " << state.value() << endl;
         return state.value();
     }
+    expanded++;
+
     int tmp;
     int score = -100000;
     state_t child;
@@ -93,6 +98,7 @@ int negamax(state_t state, int depth, int color, bool use_tt = false){
         //cout << "Valor: " << state.value() << endl;
         return color*state.value();
     }
+    expanded++;
 
     int alpha = -100000;
     int tmp;
@@ -113,7 +119,35 @@ int negamax(state_t state, int depth, int color, bool use_tt = false){
 
 
 };
-int negamax(state_t state, int depth, int alpha, int beta, int color, bool use_tt = false);
+
+int negamax(state_t state, int depth, int alpha, int beta, int color, bool use_tt = false){
+    if (state.terminal()) {
+            //cout << "Valor: " << state.value() << endl;
+            return color*state.value();
+        }
+    expanded++;
+    
+    int score = -100000;
+    int val;
+    bool mv = false;
+    state_t child;
+    if(color == 1){
+        mv = true;
+    }
+    vector<int> valid_moves = state.get_valid_moves(mv);
+    for(unsigned i = 0; i < valid_moves.size(); i++){
+        child = state.move(mv,valid_moves[i]);
+        generated++;
+        val = -negamax(child,depth-1,-beta,-alpha,-color,use_tt);
+        score = score > val ? score : val;
+        alpha = alpha > val ? alpha : val;
+        if(alpha >= beta){
+            break;
+        }
+    }
+    return score;
+};
+
 int scout(state_t state, int depth, int color, bool use_tt = false);
 int negascout(state_t state, int depth, int alpha, int beta, int color, bool use_tt = false);
 
@@ -178,7 +212,7 @@ int main(int argc, const char **argv) {
             } else if( algorithm == 1 ) {
                 value = negamax(pv[i], 0, color, use_tt);
             } else if( algorithm == 2 ) {
-                //value = negamax(pv[i], 0, -200, 200, color, use_tt);
+                value = negamax(pv[i], 0, -200, 200, color, use_tt);
             } else if( algorithm == 3 ) {
                 //value = scout(pv[i], 0, color, use_tt);
             } else if( algorithm == 4 ) {
