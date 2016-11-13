@@ -9,6 +9,7 @@
 #include "othello_cut.h" // won't work correctly until .h is fixed!
 #include "utils.h"
 #include <vector>
+#include <algorithm>
 
 #include <unordered_map>
 
@@ -40,29 +41,43 @@ hash_table_t TTable[2];
 int maxmin(state_t state, int depth, bool use_tt);
 
 int minmax(state_t state, int depth, bool use_tt = false){
-    if (state.terminal()) return state.value();
-    unsigned tmp;
-    unsigned score = 100000;
+    //if (state.terminal()) return state.value();
+    if (state.terminal()) {
+        cout << "Valor: " << state.value() << endl;
+        return state.value();
+    }
+    int tmp;
+    int score = 100000;
     state_t child;
-    std::vector<int> valid_moves = state.get_valid_moves(true);
+    std::vector<int> valid_moves = state.get_valid_moves(false);
     for (unsigned i = 0; i < valid_moves.size() ; i++) {
-        child = state.move(true, valid_moves[i]);
-        score = score < (tmp = maxmin(child, depth - 1, use_tt)) ? score : tmp; 
-        //score = min(score, maxmin(child, depth - 1))
+        child = state.move(false, valid_moves[i]);
+        cout << "Jugó Blanco" << endl;
+        cout << child << endl;
+        score = score < (tmp = maxmin(child, depth - 1, use_tt)) ? score : tmp;
+        //cout << "Valor: " << tmp << endl; 
+        //score = std::min(score, maxmin(child, depth - 1, use_tt));
     }
     return score;
 };
 
 int maxmin(state_t state, int depth, bool use_tt = false) {
-    if (state.terminal()) return state.value();
-    unsigned tmp;
-    unsigned score = 100000;
+    if (state.terminal()) {
+        cout << "Valor: " << state.value() << endl;
+        return state.value();
+    }
+    int tmp;
+    int score = -100000;
     state_t child;
-    std::vector<int> valid_moves = state.get_valid_moves(false);
+    std::vector<int> valid_moves = state.get_valid_moves(true);
     for (unsigned i = 0; i < valid_moves.size() ; i++) {
-        child = state.move(false, valid_moves[i]);
-        score = score < (tmp = minmax(child, depth - 1, use_tt)) ? tmp : score; 
-        //score = max(score, minmax(child, depth - 1))
+        child = state.move(true, valid_moves[i]);
+        cout << "Jugó Negro" << endl;
+        cout << child << endl;
+        
+        score = score < (tmp = minmax(child, depth - 1, use_tt)) ? tmp : score;  
+        //score = std::max(score, minmax(child, depth - 1, use_tt));
+        //cout << "Valor: " << tmp << endl;
     }
     return score;
 };
@@ -117,7 +132,8 @@ int main(int argc, const char **argv) {
     // Run algorithm along PV (backwards)
     cout << "Moving along PV:" << endl;
     for( int i = 0; i <= npv; ++i ) {
-        //cout << pv[i];
+        cout << "Tablero inicial: " << endl;
+        cout << pv[i];
         int value = 0;
         TTable[0].clear();
         TTable[1].clear();
@@ -153,7 +169,7 @@ int main(int argc, const char **argv) {
              << ", seconds=" << elapsed_time
              << ", #generated/second=" << generated/elapsed_time
              << endl;
-        if (i == 1) {
+        if (i == 4) {
             break;
         }
     }
