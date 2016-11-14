@@ -139,10 +139,12 @@ bool test(state_t state, int depth, int color, int score, bool func(int,int)) {
     if (state.terminal()) {
         return func(state.value(),score) ? true : false;
     }
+    expanded++;
     state_t child;
     vector<int> valid_moves = state.get_valid_moves(color == 1);
     for(unsigned i = 0; i < valid_moves.size(); i++){
         child = state.move(color == 1,valid_moves[i]);
+        generated++;
         if (color == 1 && test(child, depth-1, -color, score, func)){
             return true;
         }
