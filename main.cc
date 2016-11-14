@@ -158,6 +158,7 @@ bool mayorigual(int a, int b){
 
 
 // COMO SE SI ES MAX O ES MIN? color == 1 ? NOP
+/*
 bool test(state_t state, int depth, int color, int score, bool func(int,int), int max){
     if(state.terminal()){
         return func(color*state.value(),score) ? true : false;
@@ -180,6 +181,7 @@ bool test(state_t state, int depth, int color, int score, bool func(int,int), in
     return max == 1 ? false : true;
 }
 
+
 int scout_m(state_t state, int depth, int color, int max, bool use_tt = false){
     if(state.terminal()){
         return color*state.value();
@@ -195,10 +197,11 @@ int scout_m(state_t state, int depth, int color, int max, bool use_tt = false){
     for(unsigned i = 0; i < valid_moves.size(); i++){
         child = state.move(mv,valid_moves[i]);
         generated++;
-        if (i == 0){
+        if (i == 0) {
             score = scout_m(child,depth-1,-color, -max,use_tt);
-        } else {
-            if (max == 1 && test(child,depth,-color, score,mayor,-max)){
+        } 
+        else {
+            if (max == 1 && test(child,depth,-color, score,mayor,-max)) {
                 score = scout_m(child, depth-1, -color, -max, use_tt);
             }
             if (max == -1 && !test(child,depth,-color, score,mayorigual,-max)){
@@ -212,10 +215,59 @@ int scout_m(state_t state, int depth, int color, int max, bool use_tt = false){
 int scout(state_t state, int depth, int color, bool use_tt = false){
     return scout_m(state, depth, color, 1, use_tt);
 };
+*/
 
+bool test(state_t state, int depth, int color, int score, bool func(int,int)) {
+    if (state.terminal()) {
+        //return func(state.value(),score) ? true : false;
+        return func(state.value(),score) ? true : false;
+    }
+    state_t child;
+    vector<int> valid_moves = state.get_valid_moves(color == 1);
+    for(unsigned i = 0; i < valid_moves.size(); i++){
+        child = state.move(color == 1,valid_moves[i]);
+        if (color == 1 && test(child, depth-1, -color, score, func)){
+            return true;
+        }
+        if (color == -1 && !test(child, depth-1, -color, score, func)){
+            return false;
+        }
+    }
+    return color == 1 ? false : true;
+}
+
+int scout(state_t state, int depth, int color, bool use_tt = false) {
+    if (state.terminal()) {
+        //cout << state.value() << endl; 
+        //return state.value();
+        return state.value();
+    }
+    expanded++;
+    int score = 0;
+    state_t child;
+    vector<int> valid_moves = state.get_valid_moves(color == 1);
+    for (unsigned i = 0; i < valid_moves.size(); i++) {
+        //color == 1 ? cout << "Juega Negro" << endl : cout << "Juega Blanco" << endl; 
+        child = state.move(color == 1,valid_moves[i]);
+        //cout << child;
+        generated++;
+        if (i == 0) {
+            score = scout(child, depth-1, -color, use_tt);
+        } 
+        else {
+            if (color == 1 && test(child, depth, -color, score, mayor)) {
+                score = scout(child, depth-1, -color, use_tt);
+            }
+            if (color == -1 && !test(child, depth, -color, score, mayorigual)){
+                score = scout(child, depth-1, -color, use_tt);
+            }
+        }
+    }
+    return score;
+};
 
 int negascout(state_t state, int depth, int alpha, int beta, int color, bool use_tt = false){
-    if(state.terminal()){
+    if (state.terminal()){
         return color*state.value();
     }
     expanded++;
@@ -290,8 +342,8 @@ int main(int argc, const char **argv) {
     // Run algorithm along PV (backwards)
     cout << "Moving along PV:" << endl;
     for( int i = 0; i <= npv; ++i ) {
-        // cout << "Tablero inicial: " << endl;
-        // cout << pv[i];
+        //cout << "Tablero inicial: " << endl;
+        //cout << pv[i];
         int value = 0;
         TTable[0].clear();
         TTable[1].clear();
@@ -308,7 +360,7 @@ int main(int argc, const char **argv) {
             } else if( algorithm == 2 ) {
                 value = negamax(pv[i], 0, -200, 200, color, use_tt);
             } else if( algorithm == 3 ) {
-                value = scout(pv[i], 0, color, use_tt);
+                value = color * scout(pv[i], 0, color, use_tt);
             } else if( algorithm == 4 ) {
                 value = negascout(pv[i], 0, -200, 200, color, use_tt);
             }
@@ -328,7 +380,7 @@ int main(int argc, const char **argv) {
              << ", #generated/second=" << generated/elapsed_time
              << endl;
         /*
-        if (i == 4) {
+        if (i == 1) {
             break;
         }
         */
