@@ -30,7 +30,7 @@ Actividad 2
 Para la implementacion de los algoritmos, se utilizaron los pseudocodigos vistos en clase, en lugar de llamadas a funciones como
 max y min de la libreria cmath de c++, se utilizaron operadores ternarios para aumentar la velocidad de ejecucion y ahorrar tiempo.
 En el programa principal, en la condicion de llamada al algoritmo scout, se agrego la multiplicacion por el color al obtener el res
-ultado, ya que al igual que minmax-maxmin, este siempre retorna el valor del jugador MAX por lo tanto para que el vlue obtenido siem
+ultado, ya que al igual que minmax-maxmin, este siempre retorna el valor del jugador MAX por lo tanto para que el value obtenido siem
 pre reporte -4, hacia falta esta multiplicacion.
 
 ---------------------------------------------------------------------------
@@ -52,7 +52,7 @@ Sobre Minmax y Negamax(Minmax):
 	Dado que básicamente son el mismo algoritmo, y el segundo solo busca elminar la doble recursion, vemos que se comportan casi iguales.
 	La cantidad de nodos generadas asi como de nodos expandidos, es la misma, como era de esperarse.
 	Por otro lado, vemos una pequeña discrepancia en cuanto al tiempo total, la cual es minima, sin embargo esto puede deberse a los para
-	metros que son pasados en las llamadas, ya que estos aumentan el tiempo de ejecucion del programa, de esta mismo forma en cada llamada al algoritmo negamax, se debe modificar el color del jugador lo cual tambien genera una pequeña perdida de tiempo al momento de correr el algoritmo.
+	metros que son pasados en las llamadas, ya que estos aumentan el tiempo de ejecucion del programa, de esta misma forma en cada llamada al algoritmo negamax, se debe modificar el color del jugador lo cual tambien genera una pequeña perdida de tiempo al momento de correr el algoritmo.
 
 	Vemos que estos algoritmos, no lograron llegar tan "lejos", como los otros, ya que en efecto, generan demasiados nodos y no buscan podas en el arbol de juego por lo tanto les es muy dificil avanzar en poco tiempo sobre variaciones principales con mas nodos generados.
 
@@ -66,6 +66,8 @@ Negamax(Alpha - Beta):
 	13. Black moves: value=-4, #expanded=315074162, #generated=415909955, seconds=142.768, #generated/second=2.91319e+06
 
 	La poda de nodos, nos permitio avanzar 5 variaciones principales mas, tambien podemos notar que la cantidad de nodos generados en la variacion mas alta que alcanzo el algoritmo, es aproximadamente la mitad de los nodos que generaron negamax y minmax en la variacion 18.
+
+	Por otro lado, vimos que la velocidad de generacion de nodos, se vio un poco afectada con la implementación del Alpha - Beta, respecto a minmax.
 
 Scout y NegaScout
 
