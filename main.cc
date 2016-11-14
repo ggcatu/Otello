@@ -51,13 +51,11 @@ int minmax(state_t state, int depth, bool use_tt = false){
     int score = 100000;
     state_t child;
     vector<int> valid_moves = state.get_valid_moves(false);
-    if (valid_moves.size() != 0) {
-        for (unsigned i = 0; i < valid_moves.size() ; i++) {
-            child = state.move(false, valid_moves[i]);
-            generated++;
-            score = score < (tmp = maxmin(child, depth - 1, use_tt)) ? score : tmp;
+    for (unsigned i = 0; i < valid_moves.size() ; i++) {
+        child = state.move(false, valid_moves[i]);
+        generated++;
+        score = score < (tmp = maxmin(child, depth - 1, use_tt)) ? score : tmp;
 
-        }
     }
     return score;
 };
@@ -72,14 +70,12 @@ int maxmin(state_t state, int depth, bool use_tt = false) {
     int score = -100000;
     state_t child;
     vector<int> valid_moves = state.get_valid_moves(true);
-    if (valid_moves.size() != 0) {
-        for (unsigned i = 0; i < valid_moves.size() ; i++) {
-            child = state.move(true, valid_moves[i]);
-            generated++;
-            
-            score = score < (tmp = minmax(child, depth - 1, use_tt)) ? tmp : score;  
+    for (unsigned i = 0; i < valid_moves.size() ; i++) {
+        child = state.move(true, valid_moves[i]);
+        generated++;
+        
+        score = score < (tmp = minmax(child, depth - 1, use_tt)) ? tmp : score;  
 
-        }
     }
     return score;
 };
@@ -92,11 +88,8 @@ int negamax(state_t state, int depth, int color, bool use_tt = false){
 
     int alpha = -100000;
     int tmp;
-    bool mv = false;
+    bool mv = (color == 1);
     state_t child;
-    if(color == 1){
-        mv = true;
-    }
     vector<int> valid_moves = state.get_valid_moves(mv);
     if(valid_moves.size() != 0){
         for(unsigned i = 0; i < valid_moves.size(); i++){
@@ -118,11 +111,8 @@ int negamax(state_t state, int depth, int alpha, int beta, int color, bool use_t
     
     int score = -100000;
     int val;
-    bool mv = false;
+    bool mv = (color == 1);
     state_t child;
-    if(color == 1){
-        mv = true;
-    }
     vector<int> valid_moves = state.get_valid_moves(mv);
     for(unsigned i = 0; i < valid_moves.size(); i++){
         child = state.move(mv,valid_moves[i]);
@@ -196,10 +186,7 @@ int negascout(state_t state, int depth, int alpha, int beta, int color, bool use
     expanded++;
     int score;
     state_t child;
-    bool mv = false;
-    if(color == 1){
-        mv = true;
-    }
+    bool mv = (color == 1);
     vector<int> valid_moves = state.get_valid_moves(mv);
     for(unsigned i = 0; i < valid_moves.size(); i++){
         child = state.move(mv,valid_moves[i]);

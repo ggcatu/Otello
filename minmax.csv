@@ -1,0 +1,20 @@
+Extracting principal variation (PV) with 33 plays ... done!
+Algorithm: Minmax-Maxmin
+Moving along PV:
+34. White moves: value=-4, #expanded=0, #generated=0, seconds=0, #generated/second=-nan
+33. Black moves: value=-4, #expanded=1, #generated=1, seconds=0, #generated/second=inf
+32. White moves: value=-4, #expanded=3, #generated=4, seconds=0, #generated/second=inf
+31. Black moves: value=-4, #expanded=4, #generated=5, seconds=0, #generated/second=inf
+30. White moves: value=-4, #expanded=9, #generated=12, seconds=0, #generated/second=inf
+29. Black moves: value=-4, #expanded=10, #generated=13, seconds=0, #generated/second=inf
+28. White moves: value=-4, #expanded=64, #generated=90, seconds=0, #generated/second=inf
+27. Black moves: value=-4, #expanded=125, #generated=176, seconds=0, #generated/second=inf
+26. White moves: value=-4, #expanded=744, #generated=1048, seconds=0, #generated/second=inf
+25. Black moves: value=-4, #expanded=3168, #generated=4497, seconds=0.002857, #generated/second=1.57403e+06
+24. White moves: value=-4, #expanded=8597, #generated=11977, seconds=0.007096, #generated/second=1.68785e+06
+23. Black moves: value=-4, #expanded=55127, #generated=76825, seconds=0.022342, #generated/second=3.43859e+06
+22. White moves: value=-4, #expanded=308479, #generated=428401, seconds=0.116206, #generated/second=3.68656e+06
+21. Black moves: value=-4, #expanded=2525249, #generated=3478734, seconds=0.941096, #generated/second=3.69647e+06
+20. White moves: value=-4, #expanded=9459570, #generated=13078932, seconds=3.53521, #generated/second=3.69962e+06
+19. Black moves: value=-4, #expanded=65121519, #generated=90647894, seconds=23.6861, #generated/second=3.82705e+06
+18. White moves: value=-4, #expanded=625084814, #generated=876269597, seconds=229.718, #generated/second=3.81454e+06
