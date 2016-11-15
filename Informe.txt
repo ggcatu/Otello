@@ -1,0 +1,46 @@
+Universidad Simon Bolivar
+Inteligencia Artificial I
+Proyecto II - Othello
+
+Anthony El Khareh
+Eliot Diaz
+12-11006 Gabriel Gimenez
+
+Conclusiones
+
+Para generar las conclusiones expresadas en este informe, se procedió programando los 4 algoritmos pedidos por la asignación,
+y los mismos se corrieron durante un lapso de 10 minutos, bajo las mismas condiciones (CPU, Memoria).
+
+Sobre Minmax y Negamax(Minmax):
+	
+	Minmax
+	18. White moves: value=-4, #expanded=625084814, #generated=876269597, seconds=229.718, #generated/second=3.81454e+06
+
+	Negamax
+	18. White moves: value=-4, #expanded=625084814, #generated=876269597, seconds=250.962, #generated/second=3.49164e+06
+
+	Dado que básicamente son el mismo algoritmo, y el segundo solo busca elminar la doble recursion, vemos que se comportan casi iguales.
+	La cantidad de nodos generadas asi como de nodos expandidos, es la misma, como era de esperarse.
+	Por otro lado, vemos una pequeña discrepancia en cuanto al tiempo requerido, pero sobre este .."NOSE?"
+
+	Vemos que estos algoritmos, no lograron llegar tan "lejos", como los otros, ya que en efecto, generan demasiados nodos y no buscan podas en el arbol de juego.
+
+Negamax(Alpha - Beta):
+	
+	18. White moves: value=-4, #expanded=960343, #generated=1259429, seconds=0.456114, #generated/second=2.76122e+06
+
+	Podemos notar, que a la misma profundidad que llegó Minmax, la poda del Alpha-Beta pruning, nos permitió generar casi 1/900 de los nodos
+	generados anteriormente, lo que le provocó que el algoritmo se adentrase en el arbol mucho mas rápido, (alrededor de 500 veces).
+
+	13. Black moves: value=-4, #expanded=315074162, #generated=415909955, seconds=142.768, #generated/second=2.91319e+06
+
+	Finalmente hasta el último punto de actualización podemos ver, como aún no habia generado la mitad de los nodos que se habían generado anteriormente.
+	Otra cosa a notar es como la tasa de generacion de datos se vio un poco afectada.
+
+Scout y NegaScout
+	
+	A la verga scout no genera nodos
+	12. White moves: value=-4, #expanded=693495, #generated=1247342, seconds=253.415, #generated/second=4922.13
+
+	12. White moves: value=-4, #expanded=477003110, #generated=623011942, seconds=218.247, #generated/second=2.85461e+06
+
