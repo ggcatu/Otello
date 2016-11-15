@@ -1,0 +1,100 @@
+Inteligencia Artificial I
+
+Proyecto 2
+Implementación y evaluación de algoritmos de juegos para una versión 
+reducida del juego de othello.
+
+12-11006 Gabriel Gimenez
+12-11075 Anthony El Kareh
+12-10694 Eliot Díaz
+
+Todas las corridas fueron realizadas en una computadora con las siguientes 
+especificaciones:
+
+Procesador: Intel® Core™ i7-3770 CPU @ 3.40GHz × 8 
+RAM: 8GB
+SO: Ubuntu 14 64 bits
+
+
+-------------------------------------------------------------------------------
+                                Actividad 1
+-------------------------------------------------------------------------------
+
+Para completar la representación del juego, se procedió a agregar las 
+verificaciones faltantes en las diagonales para chequear si un conjunto de 
+piezas se encontraban flanqueadas por la jugada del color y la posición 
+especificadas (en la función outflank). De igual forma, se agregó el código 
+faltante en la función move para cambiar el color de aquellas piezas 
+flanqueadas por el nuevo movimiento en las diagonales.
+
+Se implementó además la función get_valid_moves, que para un estado devuelve el
+vector que almacena las posiciones que representan los movimiento válidos que 
+puede realizar el jugador del color especificado. Dicha implementación se 
+realizó copiando el código de la función get_random_move, cambiando el valor de
+retorno (en vez de un movimiento aleatorio del vector, se retorna el vector 
+completo) y se colocó una condición para generar el movimiento 36 (pasar el 
+turno) en caso de que el estado no sea terminal y no existan movimientos 
+válidos.
+
+-------------------------------------------------------------------------------
+                                Actividad 2
+-------------------------------------------------------------------------------
+
+Para la implementación de los algoritmos, se utilizaron los pseudocódigos 
+vistos en clase. En lugar de llamadas a funciones como max y min de la librería
+cmath de c++, se utilizaron operadores ternarios para aumentar la velocidad de 
+ejecución y ahorrar tiempo.
+
+Al igual que minmax-maxmin, el algoritmo scout siempre retorna el valor del 
+jugador MAX (el jugador que mueve las piezas negras), por ello, en el programa 
+principal en la condición de llamada de este algoritmo se agregó la 
+multiplicación por el color al obtener el resultado, para no modificar el value 
+-4.
+
+-------------------------------------------------------------------------------
+                                Conclusiones
+-------------------------------------------------------------------------------
+
+
+Para generar los resultados expresados en este informe, se programaron los 4 algoritmos pedidos por la asignación, y los mismos se corrieron durante un lapso de 10 minutos, bajo las mismas condiciones (CPU, Memoria).
+
+Sobre Minmax y Negamax(Minmax):
+	
+	Minmax
+	18. White moves: value=-4, #expanded=625084814, #generated=876269597, seconds=229.718, #generated/second=3.81454e+06
+
+	Negamax
+	18. White moves: value=-4, #expanded=625084814, #generated=876269597, seconds=250.962, #generated/second=3.49164e+06
+
+	Dado que básicamente son el mismo algoritmo, y el segundo solo busca eliminar la recursión mutua, se observa que se comportan casi iguales.
+
+	La cantidad de nodos generados así como de nodos expandidos, es la misma, como era de esperarse.
+	
+	Por otro lado, se observa una pequeña discrepancia en cuanto al tiempo total, la cual es mínima, sin embargo esto puede deberse a los parámetros que son pasados en las llamadas, ya que estos aumentan el tiempo de ejecucion del programa, de esta mismo forma en cada llamada al algoritmo negamax, se debe modificar el color del jugador lo cual también genera una pequeña pérdida de tiempo al momento de correr el algoritmo.
+
+	Estos algoritmos, no lograron llegar tan "lejos" como los otros, ya que generan más nodos y no poseen ningún mecanismo de poda del árbol de juego, lo cual hace más dificil avanzar en poco tiempo sobre la variación principal.
+
+Negamax(Alpha - Beta):
+	
+	18. White moves: value=-4, #expanded=960343, #generated=1259429, seconds=0.456114, #generated/second=2.76122e+06
+
+	Se puede notar, que a la misma profundidad que llegó Minmax, la poda del Alpha-Beta pruning, permitió generar casi 1/900 de los nodos generados anteriormente, lo que provocó que el algoritmo se adentrarse en la variación principal mucho mas rápido (alrededor de 500 veces).
+
+	13. Black moves: value=-4, #expanded=315074162, #generated=415909955, seconds=142.768, #generated/second=2.91319e+06
+
+	La poda de nodos alpha-beta, permitió avanzar 5 tableros más sobre la variación principal. También se puede notar que la cantidad de nodos generados en la variación más alta que alcanzó el algoritmo, es aproximadamente la mitad de los nodos que generaron negamax y minmax en la variación 18.
+
+Scout y NegaScout
+
+	Scout
+	12. White moves: value=-4, #expanded=693495, #generated=1247342, seconds=253.415, #generated/second=4922.13
+
+	Negascout
+	12. White moves: value=-4, #expanded=477003110, #generated=623011942, seconds=218.247, #generated/second=2.85461e+06
+
+
+	Estos son los 2 algoritmos más eficientes de los 5 implementados para esta entrega, ambos lograron llegar más "lejos" que todos los demás sobre la variación principal y en un tiempo excepcional, sin embargo hay ciertas consideraciones a discutir.
+
+	En el caso de scout, se puede ver que chequear (mediante el procedimiento test) el explorar o no una rama del árbol reduce la cantidad de nodos generados en unas 577 veces, lo cual ahorra muchísima memoria ya que no se revisan ramas del arbol que no tendrán efecto sobre el valor final de un nodo, bien sea un nodo Max o Min. 
+
+	Sin embargo, negascout es más veloz que scout, ya que a pesar de generar una cantidad mucho mayor de nodos, las llamadas a test en scout toman un tiempo prudencial para determinar si se explorará o no una rama, en cambio negascout ignora ese procedimiento llevando sus cotas (alpha y beta) en todo momento del algoritmo. 
