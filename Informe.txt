@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 Inteligencia Artificial I
 
 Proyecto 2
@@ -56,86 +55,90 @@ multiplicación por el color al obtener el resultado, para no modificar el value
                                 Conclusiones
 -------------------------------------------------------------------------------
 
+Para generar los resultados expresados en este informe, se programaron los 4 
+algoritmos pedidos por la asignación, y los mismos se corrieron durante un 
+lapso de 10 minutos, bajo las mismas condiciones (CPU, Memoria).
 
-Para generar los resultados expresados en este informe, se programaron los 4 algoritmos pedidos por la asignación, y los mismos se corrieron durante un lapso de 10 minutos, bajo las mismas condiciones (CPU, Memoria).
-=======
-Universidad Simon Bolivar
-Inteligencia Artificial I
-Proyecto II - Othello
+Los resultados obtenidos por el algoritmo Minmax se encuentran en el archivo 
+"minmax.csv" y el tablero más "lejos" sobre la variación principal al cual se 
+calculó su valor es el siguiente:
+    
+    18. White moves: value=-4, #expanded=625084814, #generated=876269597, 
+                     seconds=229.718, #generated/second=3.81454e+06
 
-Anthony El Khareh
-Eliot Diaz
-12-11006 Gabriel Gimenez
+Los resultados obtenidos por el algoritmo Negamax se encuentran en el archivo 
+"negamax.csv" y el tablero más "lejos" sobre la variación principal al cual se 
+calculó su valor es el siguiente:
 
-Conclusiones
+    18. White moves: value=-4, #expanded=625084814, #generated=876269597, 
+                     seconds=250.962, #generated/second=3.49164e+06
 
-Para generar las conclusiones expresadas en este informe, se procedió programando los 4 algoritmos pedidos por la asignación,
-y los mismos se corrieron durante un lapso de 10 minutos, bajo las mismas condiciones (CPU, Memoria).
->>>>>>> 21c100e07ad495eeae375529535a9abf0afa8af5
-
-Sobre Minmax y Negamax(Minmax):
+Dado que básicamente son el mismo algoritmo, y el segundo solo busca eliminar 
+la recursión mutua, se observa que se comportan casi iguales. La cantidad de 
+nodos generados así como de nodos expandidos, es la misma, como era de 
+esperarse.
 	
-	Minmax
-	18. White moves: value=-4, #expanded=625084814, #generated=876269597, seconds=229.718, #generated/second=3.81454e+06
+Por otro lado, se observa una pequeña discrepancia en cuanto al tiempo total,
+la cual es mínima, sin embargo esto puede deberse a los parámetros que son 
+pasados en las llamadas, ya que estos aumentan el tiempo de ejecucion del 
+programa, de esta mismo forma en cada llamada al algoritmo negamax, se debe 
+modificar el color del jugador lo cual también genera una pequeña pérdida de 
+tiempo al momento de correr el algoritmo.
 
-	Negamax
-	18. White moves: value=-4, #expanded=625084814, #generated=876269597, seconds=250.962, #generated/second=3.49164e+06
+Estos algoritmos, no lograron llegar tan "lejos" como los otros, ya que generan
+más nodos y no poseen ningún mecanismo de poda del árbol de juego, lo cual hace
+más dificil avanzar en poco tiempo sobre la variación principal.
 
-<<<<<<< HEAD
-	Dado que básicamente son el mismo algoritmo, y el segundo solo busca eliminar la recursión mutua, se observa que se comportan casi iguales.
+Los resultados obtenidos por el algoritmo Negamax (con poda Alpha-Beta) se 
+encuentran en el archivo "negamax-alpha-beta.csv" y el tablero más "lejos" 
+sobre la variación principal al cual se calculó su valor es el siguiente:
 
-	La cantidad de nodos generados así como de nodos expandidos, es la misma, como era de esperarse.
+    13. Black moves: value=-4, #expanded=315074162, #generated=415909955, 
+                     seconds=142.768, #generated/second=2.91319e+06
+
+Se puede notar, que a la misma profundidad que llegó Minmax:
 	
-	Por otro lado, se observa una pequeña discrepancia en cuanto al tiempo total, la cual es mínima, sin embargo esto puede deberse a los parámetros que son pasados en las llamadas, ya que estos aumentan el tiempo de ejecucion del programa, de esta mismo forma en cada llamada al algoritmo negamax, se debe modificar el color del jugador lo cual también genera una pequeña pérdida de tiempo al momento de correr el algoritmo.
+    18. White moves: value=-4, #expanded=960343, #generated=1259429, 
+                     seconds=0.456114, #generated/second=2.76122e+06
 
-	Estos algoritmos, no lograron llegar tan "lejos" como los otros, ya que generan más nodos y no poseen ningún mecanismo de poda del árbol de juego, lo cual hace más dificil avanzar en poco tiempo sobre la variación principal.
-=======
-	Dado que básicamente son el mismo algoritmo, y el segundo solo busca elminar la doble recursion, vemos que se comportan casi iguales.
-	La cantidad de nodos generadas asi como de nodos expandidos, es la misma, como era de esperarse.
-	Por otro lado, vemos una pequeña discrepancia en cuanto al tiempo requerido, pero sobre este .."NOSE?"
+la poda Alpha-Beta, permitió generar casi 1/900 de los nodos generados 
+anteriormente, lo que provocó que el algoritmo se adentrarse en la variación 
+principal mucho mas rápido (alrededor de 500 veces).
 
-	Vemos que estos algoritmos, no lograron llegar tan "lejos", como los otros, ya que en efecto, generan demasiados nodos y no buscan podas en el arbol de juego.
->>>>>>> 21c100e07ad495eeae375529535a9abf0afa8af5
+La poda de nodos alpha-beta, permitió avanzar 5 tableros más sobre la variación
+principal. También se puede notar que la cantidad de nodos generados en la 
+variación más alta que alcanzó el algoritmo, es aproximadamente la mitad de los
+nodos que generaron negamax y minmax en la variación 18.
 
-Negamax(Alpha - Beta):
+Los resultados obtenidos por el algoritmo Scout se encuentran en el archivo 
+"scout.csv" y el tablero más "lejos" sobre la variación principal al cual se 
+calculó su valor es el siguiente:
 	
-	18. White moves: value=-4, #expanded=960343, #generated=1259429, seconds=0.456114, #generated/second=2.76122e+06
+    12. White moves: value=-4, #expanded=545805549, #generated=713154919, 
+                     seconds=246.425, #generated/second=2.894e+06
 
-<<<<<<< HEAD
-	Se puede notar, que a la misma profundidad que llegó Minmax, la poda del Alpha-Beta pruning, permitió generar casi 1/900 de los nodos generados anteriormente, lo que provocó que el algoritmo se adentrarse en la variación principal mucho mas rápido (alrededor de 500 veces).
-
-	13. Black moves: value=-4, #expanded=315074162, #generated=415909955, seconds=142.768, #generated/second=2.91319e+06
-
-	La poda de nodos alpha-beta, permitió avanzar 5 tableros más sobre la variación principal. También se puede notar que la cantidad de nodos generados en la variación más alta que alcanzó el algoritmo, es aproximadamente la mitad de los nodos que generaron negamax y minmax en la variación 18.
-
-Scout y NegaScout
-
-	Scout
-	12. White moves: value=-4, #expanded=693495, #generated=1247342, seconds=253.415, #generated/second=4922.13
-
-	Negascout
-	12. White moves: value=-4, #expanded=477003110, #generated=623011942, seconds=218.247, #generated/second=2.85461e+06
-
-
-	Estos son los 2 algoritmos más eficientes de los 5 implementados para esta entrega, ambos lograron llegar más "lejos" que todos los demás sobre la variación principal y en un tiempo excepcional, sin embargo hay ciertas consideraciones a discutir.
-
-	En el caso de scout, se puede ver que chequear (mediante el procedimiento test) el explorar o no una rama del árbol reduce la cantidad de nodos generados en unas 577 veces, lo cual ahorra muchísima memoria ya que no se revisan ramas del arbol que no tendrán efecto sobre el valor final de un nodo, bien sea un nodo Max o Min. 
-
-	Sin embargo, negascout es más veloz que scout, ya que a pesar de generar una cantidad mucho mayor de nodos, las llamadas a test en scout toman un tiempo prudencial para determinar si se explorará o no una rama, en cambio negascout ignora ese procedimiento llevando sus cotas (alpha y beta) en todo momento del algoritmo. 
-=======
-	Podemos notar, que a la misma profundidad que llegó Minmax, la poda del Alpha-Beta pruning, nos permitió generar casi 1/900 de los nodos
-	generados anteriormente, lo que le provocó que el algoritmo se adentrase en el arbol mucho mas rápido, (alrededor de 500 veces).
-
-	13. Black moves: value=-4, #expanded=315074162, #generated=415909955, seconds=142.768, #generated/second=2.91319e+06
-
-	Finalmente hasta el último punto de actualización podemos ver, como aún no habia generado la mitad de los nodos que se habían generado anteriormente.
-	Otra cosa a notar es como la tasa de generacion de datos se vio un poco afectada.
-
-Scout y NegaScout
+Los resultados obtenidos por el algoritmo Negascout se encuentran en el archivo 
+"negascout.csv" y el tablero más "lejos" sobre la variación principal al cual 
+se calculó su valor es el siguiente:
 	
-	A la verga scout no genera nodos
-	12. White moves: value=-4, #expanded=693495, #generated=1247342, seconds=253.415, #generated/second=4922.13
+    12. White moves: value=-4, #expanded=477003110, #generated=623011942, 
+                     seconds=218.247, #generated/second=2.85461e+06
 
-	12. White moves: value=-4, #expanded=477003110, #generated=623011942, seconds=218.247, #generated/second=2.85461e+06
+Estos son los 2 algoritmos más eficientes de los 5 implementados para esta 
+entrega, ambos lograron llegar más "lejos" que todos los demás sobre la 
+variación principal y en un tiempo excepcional, sin embargo hay ciertas 
+consideraciones a discutir.
 
->>>>>>> 21c100e07ad495eeae375529535a9abf0afa8af5
+En el caso de scout, se puede ver que chequear (mediante el procedimiento test)
+el explorar o no una rama del árbol reduce la cantidad de nodos generados en 
+unas 577 veces, lo cual ahorra muchísima memoria ya que no se revisan ramas del
+árbol que no tendrán efecto sobre el valor final de un nodo, bien sea un nodo 
+Max o Min. 
+
+Por su parte, negascout es más veloz que scout, porque además de realizar el 
+test (para saber si una rama dada modificará el valor del nodo) mediante la 
+ventana generada por las cotas alpha y beta, este algoritmo utiliza la poda de 
+ramas al igual que negamax y por ende no revisa los duplicados que scout si 
+explorará. A pesar de que ambos algoritmos alcanzaron el tablero 12 en la 
+variación principal (para el tiempo dado de 10 minutos), es claro que negascout
+alcanzará el siguiente tablero con mayor rapidez que scout.

@@ -289,11 +289,6 @@ int main(int argc, const char **argv) {
              << ", seconds=" << elapsed_time
              << ", #generated/second=" << generated/elapsed_time
              << endl;
-        /*
-        if (i == 1) {
-            break;
-        }
-        */
     }
 
     return 0;
